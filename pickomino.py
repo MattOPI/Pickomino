@@ -216,7 +216,8 @@ class Pickomino:
             os.system(players[self.current_player] + " " + state_file)
             sleep(5)
         else:
-            af.write(players[self.current_player].get_action())  # python class
+            p_action = players[self.current_player].get_action()
+            af.write(p_action)  # python class
 
 
         af = open(action_file, "r")
@@ -233,5 +234,15 @@ class Pickomino:
         self.current_player = (self.current_player+1)%self.n
         if self.current_player == 0:
             self.current_turn += 1
-            
-            
+
+    def winning_player(self):
+        scores = [0]*self.n
+        for i,s in enumerate(self.players_stacks):
+            scores[i] = sum([self.tile_values[t] for t in s])
+
+        best_score = max(scores)
+        winner = []
+        for p,s in enumerate(scores):
+            if s == best_score:
+                winner.append(p)
+        return winner
