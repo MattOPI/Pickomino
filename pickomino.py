@@ -126,6 +126,9 @@ class Pickomino:
 
 
     def _do_actions(self, action):
+        if action not in self.choices :
+            raise AssertionError("Not a valid action")
+
         self.choices = []
         if action == "Pass":
             return self._pass()
@@ -142,7 +145,6 @@ class Pickomino:
         if action.isdigit():
             return self._numbers(int(action))
 
-        raise AssertionError("Not a valid action")
 
 
     def _generate_file(self, state_file, action_file):
@@ -152,7 +154,6 @@ class Pickomino:
         sf.write(action_file+"\n")
 
         # Choices
-        self._get_choices()
         for c in self.choices:
             sf.write(str(c)+" ")
         sf.write("\n")
@@ -229,6 +230,8 @@ class Pickomino:
             self.current_throw +=1
             return
 
+        ending_turn_file = root + file_code + "_zending_state"
+        self._generate_file(ending_turn_file, action_file)
         self._state_reset()
         self.current_throw = 0
         self.current_player = (self.current_player+1)%self.n
